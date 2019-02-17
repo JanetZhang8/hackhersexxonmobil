@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Title</title>
+</head>
+
+<body>
+    <canvas id='canvas' width='5000' height='2000'>
+    </canvas>
+    
+    <script type='text/javascript'>
+        var canvas;
+        var context;
+        var Val_Max;
+        var Val_Min;
+        var sections;
+        var xScale;
+        var yScale;
+        var y;
+var itemName = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80','81','82','83','84','85','86','87','88','89','90',];
+var itemValue = ['0.000000','0.063800','0.006000','0.000000','0.186200','0.041800','0.000000','0.000000','0.000000','0.000000','0.000000','0.009100','0.001200','0.000000','0.000000','0.001200','0.001800','0.000000','0.000000','0.014600','0.000900','0.000000','0.010150','0.000600','0.000000','0.005550','0.002400','668.931458','440.677551','86.359566','0.672150','0.000000','0.000000','0.000000','0.000600','34.026188','45.609848','0.309400','0.000000','0.000000','403.636932','132.476563','100.336266','1.473095','0.000000','0.007800','0.022600','0.000000','0.000000','0.000600','0.000000','0.000000','0.000000','0.000000','0.000000','0.051000','0.002550','0.027000','0.000000','0.001200','0.013900','0.004800','0.001800','68.095436','118.189011','1.958246','0.026000','0.001800','0.052600','7.770008','27.792372','19.446133','0.950651','2.745050','52.155880','1.808796','0.559601','0.057600','0.053950','0.018650','0.000000','0.000000','0.001200','0.007200','0.130200','0.730550','0.033000','0.000000','0.363601','0.020000',];
+        function init() {
+            // intialize values for each variables
+            sections = 90;
+            Val_Max = 1000;
+            var stepSize = 5;
+            var columnSize = 50;
+            var rowSize = 60;
+            var margin = 10;
+            var header = 'Total Waiting Time';
+
+            canvas = document.getElementById('canvas');
+            context = canvas.getContext('2d');
+            context.fillStyle = '#000;'
+
+            yScale = (canvas.height - columnSize - margin) / (Val_Max);
+            xScale = (canvas.width - rowSize) / (sections + 1);
+
+            context.strokeStyle = '#000;'; // background black lines
+            context.beginPath();
+            // column names 
+            context.font = '19 pt Arial;'
+            context.fillText(header, 0, columnSize - margin);
+            // draw lines in the background
+            context.font = '16 pt Helvetica'
+            var count = 0;
+            for (scale = Val_Max; scale >= 0; scale = scale - stepSize) {
+                y = columnSize + (yScale * count * stepSize);
+                context.fillText(scale, margin, y + margin);
+                context.moveTo(rowSize, y)
+                context.lineTo(canvas.width, y)
+                count++;
+            }
+            context.stroke();
+
+            // print names of each data entry
+            context.font = '20 pt Verdana';
+            context.textBaseline = 'bottom';
+            for (i = 0; i < 90; i++) {
+                computeHeight(itemValue[i]);
+                context.fillText(itemName[i], xScale * (i + 1), y - margin);
+            }
+
+            // shadow for graph's bar lines with color and offset
+
+            context.fillStyle = '#9933FF;';
+            context.shadowColor = 'rgba(128,128,128, 0.5)';
+
+            //shadow offset along X and Y direction 
+            context.shadowOffsetX = 9;
+            context.shadowOffsetY = 3;
+
+            // translate to bottom of graph  inorder to match the data 
+            context.translate(0, canvas.height - margin);
+            context.scale(xScale, -1 * yScale);
+
+            // draw each graph bars	
+            for (i = 0; i < 90; i++) {
+                context.fillRect(i + 1, 0, 0.3, itemValue[i]);
+            }
+        }
+
+        function computeHeight(value) {
+            y = canvas.height - value * yScale;
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
+
